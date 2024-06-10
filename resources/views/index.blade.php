@@ -79,7 +79,7 @@
 
 @section('conten')
 
-    <table class="table table-centered mb-0" id="basic-datatable" style="width: 100%">
+    <table class="table table-centered mb-0 " id="basic-datatable" style="width: 100%">
         <thead class="table-dark">
             <tr>
                 <th style="width: 5%" class="text-center">#ID</th>
