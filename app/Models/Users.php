@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use App\Models\learn;
 
 class Users extends Authenticatable
 {
@@ -54,11 +55,11 @@ class Users extends Authenticatable
 
     public function learn()
     {
-        return $this->hasMany(Learn::class, 'user_learn_id');
+        return $this->hasMany(learn::class, 'user_learn_id');
     }
 
     public function teach()
     {
-        return $this->hasMany(Learn::class, 'user_teach_id');
+        return $this->hasMany(learn::class, 'user_teach_id');
     }
 }
