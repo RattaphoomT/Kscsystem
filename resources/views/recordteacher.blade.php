@@ -60,6 +60,16 @@
                     </div>
 
                     <div class="form-group mt-3">
+                        <label for="teach_at">วันที่สอน</label>
+                        <input type="text" name="teach_at" id="teach_at" class="form-control datepicker" required>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="learn_at">เวลาเรียน</label>
+                        <input type="text" name="learn_at" id="learn_at" class="form-control datepicker" required>
+                    </div>
+
+                    <div class="form-group mt-3">
                         <label for="note">พัฒนาการ</label>
                         <input type="text" name="note" class="form-control mt-1">
                     </div>

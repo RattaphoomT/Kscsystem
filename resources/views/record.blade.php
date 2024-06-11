@@ -19,7 +19,7 @@
         <h3 class="text-center">บันทึกการสอน</h3>
         <hr>
 
-        <form action="{{ route('record.store') }}" method="POST">
+        <form action="{{ route('record.store') }}" method="POST" id="load">
             @csrf
             <div class="row">
 
@@ -57,6 +57,16 @@
                                     <option value="{{ $item->learn_type_id }}">{{ $item->learn_type_name }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="teach_at">วันที่สอน</label>
+                        <input type="text" name="teach_at" id="teach_at" class="form-control datepicker" required>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="learn_at">เวลาเรียน</label>
+                        <input type="text" name="learn_at" id="learn_at" class="form-control datepicker" required>
                     </div>
 
                     <div class="form-group mt-3">

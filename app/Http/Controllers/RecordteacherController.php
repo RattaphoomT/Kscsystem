@@ -29,12 +29,13 @@ class RecordteacherController extends Controller
             'user_learn_id' => 'required|integer',
             'user_teach_id' => 'required|integer',
             'learn_type_id' => 'required|integer',
+            'teach_at' => 'required|string|max:100',
+            'learn_at' => 'required|string|max:100',
             'note' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
-        $data['learn_at'] = now(); // ใส่ค่าเวลาให้กับ learn_at
-        $data['teach_at'] = now(); // ใส่ค่าเวลาให้กับ teach_at
+
         
 
         try {

@@ -43,12 +43,12 @@ class RecordController extends Controller
             'user_learn_id' => 'required|integer',
             'user_teach_id' => 'required|integer',
             'learn_type_id' => 'required|integer',
+            'teach_at' => 'required|string|max:100',
+            'learn_at' => 'required|string|max:100',
             'note' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
-        $data['learn_at'] = now(); // ใส่ค่าเวลาให้กับ learn_at
-        $data['teach_at'] = now(); // ใส่ค่าเวลาให้กับ teach_ats
         
 
         try {
@@ -78,10 +78,10 @@ class RecordController extends Controller
             // ส่งการแจ้งเตือนไปยังไลน์
             $this->sendLineNotification($message);
 
-            return redirect()->route('recordteacher')->with('success', 'บันทึกการเรียนสำเร็จ');
+            return redirect()->route('addrecord')->with('success', 'บันทึกการเรียนสำเร็จ');
 
         } catch (\Exception $e) {
-            return redirect()->route('recordteacher')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
+            return redirect()->route('addrecord')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
         }
     }
 

@@ -61,8 +61,8 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label for="user_id" class="form-label">รหัสไอดีของตนเอง</label>
-                                <input type="text" class="form-control" id="user_id" name="user_id"
+                                <label for="user_id" class="form-label">รหัสประจำตัว</label>
+                                <input type="text" class="form-control" id="user_id" name="user_id" placeholder="กรอกรหัสประจำตัว 6 หลัก"
                                     required>
                             </div>
 
