@@ -63,11 +63,14 @@ class TeacherController extends Controller
 
             // สร้างข้อความเพื่อส่งไปยังไลน์
             $message = "เพิ่มครูเรียบร้อยแล้ว\n" ."\n".
+
                        "รหัสครู: $user_id\n" .
                        "รหัสใช้เข้าสู่ระบบคือ: " . "12345678"."\n"."\n".
+
                        "ชื่อครู: " . $data['nick_name'] . "\n" .
                        "เพศ: " . ($data['gender'] == 1 ? 'ชาย' : 'หญิง') . "\n" .
                        "วันเกิด: " . $data['birthday'] . "\n" .
+                       
                        "อายุ: " . $data['Agee'] . "\n" ."\n".
                        "เบอร์ติดต่อ: " . $data['mobile_phone'] . "\n" .
                        "ไอดีไลน์: " . $data['id_line'] . "\n"."\n". 
