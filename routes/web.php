@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ShowRecordController;
 use App\Http\Controllers\RecordteacherController;
+use App\Http\Controllers\PdfController;
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\TeacherMiddleware;
@@ -53,6 +54,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/show/record',[ShowRecordController::class,'index'])->name('showrecord');
     Route::delete('delete/record/{id}', [ShowRecordController::class,'destroy'])->name('record.destroy');
 
+    //export
+    Route::get('/pdf/student/{id}', [PdfController::class, 'generateStudentPdf'])->name('pdf.student');
+
 });
 
 
@@ -81,3 +85,7 @@ Route::middleware([StudentMiddleware::class])->group(function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+Route::get('/phpinfo.php', function () {
+    return view('phpinfo');
+})->name('phpinfo');

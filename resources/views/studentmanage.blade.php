@@ -73,6 +73,9 @@
                                         class="mdi mdi-eye"></i></a>
                                 <a href="{{ route('editstudent', $user->user_id) }}" class="action-icon"><i class="mdi mdi-pencil"></i></a>
                                 <a href="#" class="action-icon delete-btn" data-id="{{ $user->user_id }}"><i class="mdi mdi-delete"></i></a>
+
+                                <a href="{{ route('pdf.student', $user->user_id) }}" class=" btn btn-success">export</a>
+                                
                             </td>
                         </tr>
                     @endif
