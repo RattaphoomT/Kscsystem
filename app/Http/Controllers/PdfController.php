@@ -5,22 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Users;
 use Carbon\Carbon;
-use Mpdf\Mpdf;
+use PDF;
 
 class PdfController extends Controller
 {
     public function generateStudentPdf($id)
     {
         // ดึงข้อมูลนักเรียนจากฐานข้อมูล
-        $student = Users::with(['user_type', 'learn', 'learn.user_teach', 'learn.learn_type'])->find($id);
+        $show = Users::with(['user_type', 'learn', 'learn.user_teach', 'learn.learn_type'])->find($id);
 
-        if (!$student) {
+        if (!$show) {
             abort(404, 'Student not found');
         }
 
         // ตั้งค่า Carbon ให้แสดงผลวันที่เป็นภาษาไทย
         Carbon::setLocale('th');
-        $updateAt = Carbon::parse($student->update_at);
+        $updateAt = Carbon::parse($show->update_at);
         $now = Carbon::now();
         $diffForHumans = $updateAt->diffForHumans($now, [
             'parts' => 3,
@@ -29,14 +29,17 @@ class PdfController extends Controller
         ]);
 
         // ส่งข้อมูลไปยัง Blade Template
-        $html = view('student', compact('student', 'diffForHumans'))->render();
+        $data = compact('show', 'diffForHumans');
+        $pdf = PDF::loadView('student', $data);
 
-        // สร้าง PDF
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML($html);
-        $mpdf->Output('student.pdf', 'D'); // 'D' สำหรับดาวน์โหลด PDF
+        // ตั้งค่าฟอนต์สำหรับ PDF
+        $pdf->getDomPDF()->getOptions()->set('isHtml5ParserEnabled', true);
+        $pdf->getDomPDF()->set_option('isPhpEnabled', true);
+        $pdf->getDomPDF()->set_option('isHtml5ParserEnabled', true);
+        $pdf->getDomPDF()->set_option('isFontSubsettingEnabled', true);
+        $pdf->getDomPDF()->set_option('isPhpEnabled', true);
 
-        // หรือบันทึกไฟล์บนเซิร์ฟเวอร์
-        // $mpdf->Output(storage_path('app/public/student.pdf'), 'F');
+        // ดาวน์โหลด PDF
+        return $pdf->download('studentdetail.pdf');
     }
 }
