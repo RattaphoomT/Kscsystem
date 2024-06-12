@@ -47,12 +47,12 @@
                     
                     <div class="form-group mt-3">
                         <label for="birthday">วันเกิด</label>
-                        <input type="text" name="birthday" id="birthday" class="form-control datepicker" required>
+                        <input type="text" name="birthday" id="birthday" class="form-control datepicker">
                     </div>
 
                     <div class="form-group mt-3">
                         <label for="Agee">อายุ</label>
-                        <input type="number" name="Agee" id="age" class="form-control mt-1" readonly>
+                        <input type="number" name="Agee" id="age" class="form-control mt-1">
                     </div>
                     <input type="hidden" name="user_status_user_status_id" value="3">
                 </div>

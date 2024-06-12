@@ -720,34 +720,42 @@
 
 
     <script>
-        $(document).ready(function() {
-            let table = $('#basic-datatable').DataTable({
-                "lengthMenu": [
-                    [10, 20, 50, -1],
-                    [10, 20, 50, "ทั้งหมด"]
-                ],
-                "language": {
-                    "lengthMenu": "แสดง _MENU_ รายการ",
-                    "zeroRecords": "ไม่พบข้อมูล",
-                    "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
-                    "infoEmpty": "ไม่มีรายการที่แสดง",
-                    "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
-                    "search": "ค้นหา:",
-                    "paginate": {
-                        "first": "หน้าแรก",
-                        "last": "หน้าสุดท้าย",
-                        "next": "ถัดไป",
-                        "previous": "ก่อนหน้า"
-                    }
-                }
-            });
-        });
-
-        document.getElementById('load').addEventListener('submit', function() {
-            document.getElementById('loadingAnimation').style.display = 'block';
-        });
-
         $(function() {
+            function calculateAge(dob) {
+                var parts = dob.split("-");
+                var day = parseInt(parts[0], 10);
+                var month = parseInt(parts[1], 10) - 1; // เดือนใน JavaScript เริ่มต้นที่ 0
+                var year = parseInt(parts[2], 10) - 543; // แปลงปี พ.ศ. เป็น ค.ศ.
+
+                var birthDate = new Date(year, month, day);
+                var today = new Date();
+                var age = today.getFullYear() - birthDate.getFullYear();
+
+                // เช็คเงื่อนไขเพิ่มเติมเพื่อคำนวณอายุให้ถูกต้อง
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            function convertToBuddhistYear(inst) {
+                setTimeout(function() {
+                    var $yearSelect = inst.dpDiv.find('.ui-datepicker-year');
+                    $yearSelect.children().each(function() {
+                        var year = parseInt($(this).val(), 10);
+                        $(this).text(year + 543);
+                    });
+                }, 50);
+            }
+
+            function clearForm() {
+                $('#birthday').val('');
+                $('#age').val('');
+                $('#teach_at').val('');
+                $('#learn_at').val('');
+            }
+
             $("#birthday").datepicker({
                 dateFormat: "dd-mm-yy", // รับรูปแบบวันที่เป็น DD-MM-YYYY
                 changeMonth: true,
@@ -762,7 +770,33 @@
                 ],
                 monthNamesShort: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
                     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-                ]
+                ],
+                beforeShow: function(input, inst) {
+                    clearForm(); // เคลียร์ฟอร์มเมื่อเปิด datepicker
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปิด datepicker
+                },
+                onChangeMonthYear: function(year, month, inst) {
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปลี่ยนเดือนหรือปี
+                },
+                onSelect: function(dateText, inst) {
+                    var age = calculateAge(dateText);
+                    $('#age').val(age); // ตั้งค่าอายุให้กับช่องอายุ
+                    $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อเลือกวันที่
+                },
+                onClose: function(dateText, inst) {
+                    if (dateText !== "") {
+                        var date = dateText.split("-");
+                        date[2] = (parseInt(date[2], 10) + 543).toString();
+                        $(this).val(date.join("-"));
+                        $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อปิด datepicker
+                    }
+                }
+            });
+
+            $('#birthday').change(function() {
+                var dob = $(this).val();
+                var age = calculateAge(dob);
+                $('#age').val(age); // ตั้งค่าอายุให้กับช่องอายุเมื่อมีการเปลี่ยนแปลง
             });
 
             $("#teach_at").datepicker({
@@ -780,13 +814,34 @@
                 monthNamesShort: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
                     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
                 ],
-                onSelect: function(dateText) {
-                    $("#learn_at").val(dateText);
+                beforeShow: function(input, inst) {
+                    clearForm(); // เคลียร์ฟอร์มเมื่อเปิด datepicker
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปิด datepicker
+                },
+                onChangeMonthYear: function(year, month, inst) {
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปลี่ยนเดือนหรือปี
+                },
+                onSelect: function(dateText, inst) {
+                    $('#learn_at').val(dateText); // ตั้งค่าเวลาเรียนให้เท่ากับวันที่สอนทันทีที่เลือก
+                    $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อเลือกวันที่
+                },
+                onClose: function(dateText, inst) {
+                    if (dateText !== "") {
+                        var date = dateText.split("-");
+                        date[2] = (parseInt(date[2], 10) + 543).toString();
+                        $(this).val(date.join("-"));
+                        $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อปิด datepicker
+                    }
                 }
             });
 
+            $('#teach_at').change(function() {
+                var teachDate = $(this).val();
+                $('#learn_at').val(
+                    teachDate); // ตั้งค่าเวลาเรียนให้เท่ากับวันที่สอนทันทีที่มีการเปลี่ยนแปลง
+            });
 
-            $("#learn_at").datepicker({
+            $('#learn_at').datepicker({
                 dateFormat: "dd-mm-yy", // รับรูปแบบวันที่เป็น DD-MM-YYYY
                 changeMonth: true,
                 changeYear: true,
@@ -800,44 +855,35 @@
                 ],
                 monthNamesShort: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
                     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-                ]
-            });
-
-            $('#birthday').change(function() {
-                var dob = $(this).val();
-                if (dob) {
-                    var age = calculateAge(dob);
-                    $('#age').val(age); // ตั้งค่าค่าอายุใน input hidden
+                ],
+                beforeShow: function(input, inst) {
+                    $('#learn_at').val(''); // เคลียร์ค่าเวลาเรียนเมื่อเปิด datepicker
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปิด datepicker
+                },
+                onChangeMonthYear: function(year, month, inst) {
+                    convertToBuddhistYear(inst); // แปลงเป็น พ.ศ. เมื่อเปลี่ยนเดือนหรือปี
+                },
+                onSelect: function(dateText) {
+                    $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อเลือกวันที่
+                },
+                onClose: function(dateText, inst) {
+                    if (dateText !== "") {
+                        var date = dateText.split("-");
+                        date[2] = (parseInt(date[2], 10) + 543).toString();
+                        $(this).val(date.join("-"));
+                        $(this).trigger('change'); // เรียกใช้งานฟังก์ชันเมื่อปิด datepicker
+                    }
                 }
             });
 
-            function calculateAge(dob) {
-                var parts = dob.split("-");
-                var day = parseInt(parts[0], 10);
-                var month = parseInt(parts[1], 10) - 1; // เดือนใน JavaScript เริ่มต้นที่ 0
-                var year = parseInt(parts[2], 10);
-
-                var birthDate = new Date(year, month, day);
-                var today = new Date();
-                var age = today.getFullYear() - birthDate.getFullYear();
-                var m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                return age;
-            }
-        });
-
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "กรุณาเลือก...",
-
+            $('#learn_at').change(function() {
+                // อาจมีการกระทำเพิ่มเติมเมื่อเปลี่ยนค่าวันที่เรียน
             });
         });
     </script>
 
 
-    
+
 
 
     @yield('scripts')
