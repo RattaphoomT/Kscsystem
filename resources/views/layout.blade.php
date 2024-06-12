@@ -720,6 +720,29 @@
 
 
     <script>
+        $(document).ready(function() {
+            let table = $('#basic-datatable').DataTable({
+                "lengthMenu": [
+                    [10, 20, 50, -1],
+                    [10, 20, 50, "ทั้งหมด"]
+                ],
+                "language": {
+                    "lengthMenu": "แสดง _MENU_ รายการ",
+                    "zeroRecords": "ไม่พบข้อมูล",
+                    "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                    "infoEmpty": "ไม่มีรายการที่แสดง",
+                    "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
+                    "search": "ค้นหา:",
+                    "paginate": {
+                        "first": "หน้าแรก",
+                        "last": "หน้าสุดท้าย",
+                        "next": "ถัดไป",
+                        "previous": "ก่อนหน้า"
+                    }
+                }
+            });
+        });
+
         $(function() {
             function calculateAge(dob) {
                 var parts = dob.split("-");
@@ -879,6 +902,17 @@
             $('#learn_at').change(function() {
                 // อาจมีการกระทำเพิ่มเติมเมื่อเปลี่ยนค่าวันที่เรียน
             });
+        });
+
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "กรุณาเลือก...",
+
+            });
+        });
+
+        document.getElementById('load').addEventListener('submit', function() {
+            document.getElementById('loadingAnimation').style.display = 'block';
         });
     </script>
 
