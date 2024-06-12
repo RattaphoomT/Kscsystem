@@ -5,7 +5,6 @@
 @endsection
 
 @section('breadcrumb')
-    
 @endsection
 
 @section('contentitle')
@@ -13,60 +12,96 @@
 @endsection
 
 @section('nonconten')
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
         <div class="card tilebox-one">
             <div class="card-body">
                 <i class='uil-notes float-end'></i>
                 <h4 class="text-uppercase mt-0">จำนวนนักเรียนทั้งหมด</h4>
-                <h2 class="my-2 text-primary text-dismissible" id="active-users-count">{{ $users->where('user_status_user_status_id', '2')->count() }}</h2>
+                <h2 class="my-2 text-primary text-dismissible" id="active-users-count">
+                    {{ $users->where('user_status_user_status_id', '2')->count() }}</h2>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
-                    <span class="text-nowrap">เมื่อ 5 ชัวโมงที่เเล้ว</span>
+                    {{-- <span class="text-nowrap">เมื่อ 5 ชัวโมงที่เเล้ว</span> --}}
                 </p>
             </div> <!-- end card-body-->
         </div>
         <!--end card-->
     </div>
 
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
         <div class="card tilebox-one">
             <div class="card-body">
                 <i class='uil-user float-end'></i>
                 <h4 class="text-uppercase mt-0">เรียนเดี่ยว</h4>
-                <h2 class="my-2 text-warning" id="active-users-count">{{ $users->where('learn_type_learn_type_id', '2')->count() }}</h2>
+                <h2 class="my-2 text-warning" id="active-users-count">
+                    {{ $users->where('learn_type_learn_type_id', '2')->count() }}</h2>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
-                    <span class="text-nowrap">เมื่อ 1 ชัวโมงที่เเล้ว</span>
+                    {{-- <span class="text-nowrap">เมื่อ 1 ชัวโมงที่เเล้ว</span> --}}
                 </p>
             </div> <!-- end card-body-->
         </div>
         <!--end card-->
     </div>
 
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
         <div class="card tilebox-one">
             <div class="card-body">
                 <i class='uil-users-alt float-end'></i>
                 <h4 class="text-uppercase mt-0">เรียนคู่</h4>
-                <h2 class="my-2 text-success" id="active-users-count">{{ $users->where('learn_type_learn_type_id', '1')->count() }}</h2>
+                <h2 class="my-2 text-success" id="active-users-count">
+                    {{ $users->where('learn_type_learn_type_id', '1')->count() }}</h2>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
-                    <span class="text-nowrap">เมื่อ 20 นาทีที่เเล้ว</span>
+                    {{-- <span class="text-nowrap">เมื่อ 20 นาทีที่เเล้ว</span> --}}
                 </p>
             </div> <!-- end card-body-->
         </div>
         <!--end card-->
     </div>
 
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
         <div class="card tilebox-one">
             <div class="card-body">
                 <i class='mdi mdi-account-group-outline float-end'></i>
                 <h4 class="text-uppercase mt-0">เรียนกลุ่ม</h4>
-                <h2 class="my-2 text-danger" id="active-users-count">{{ $users->where('learn_type_learn_type_id', '3')->count() }}</h2>
+                <h2 class="my-2 text-danger" id="active-users-count">
+                    {{ $users->where('learn_type_learn_type_id', '3')->count() }}</h2>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
-                    <span class="text-nowrap">เมื่อไม่นานมานี้</span>
+                    {{-- <span class="text-nowrap">เมื่อไม่นานมานี้</span> --}}
+                </p>
+            </div> <!-- end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
+        <div class="card tilebox-one">
+            <div class="card-body">
+                <i class='mdi mdi-account-star float-end'></i>
+                <h4 class="text-uppercase mt-0">เตรียมนักกีฬา</h4>
+                <h2 class="my-2 text-primary" id="active-users-count">
+                    {{ $users->where('learn_type_learn_type_id', '4')->count() }}</h2>
+                <p class="mb-0 text-muted">
+                    <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
+                    {{-- <span class="text-nowrap">เมื่อไม่นานมานี้</span> --}}
+                </p>
+            </div> <!-- end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+
+    <div class="col-xl-6 col-lg-6 col-sm-12 col-md-4">
+        <div class="card tilebox-one">
+            <div class="card-body">
+                <i class='mdi mdi-swim float-end'></i>
+                <h4 class="text-uppercase mt-0">นักกีฬา</h4>
+                <h2 class="my-2 text-primary" id="active-users-count">
+                    {{ $users->where('learn_type_learn_type_id', '5')->count() }}</h2>
+                <p class="mb-0 text-muted">
+                    <span class="text-success me-2"><span class="mdi mdi-arrow-up-bold"></span>update</span>
+                    {{-- <span class="text-nowrap">เมื่อไม่นานมานี้</span> --}}
                 </p>
             </div> <!-- end card-body-->
         </div>
@@ -78,7 +113,6 @@
 
 
 @section('conten')
-
     <table class="table table-centered mb-0 " id="basic-datatable" style="width: 100%">
         <thead class="table-dark">
             <tr>
@@ -96,25 +130,26 @@
             @foreach ($users as $user)
                 @if ($user->user_status_user_status_id != '1' && $user->user_status_user_status_id != '3')
                     <tr>
-                        <td class="text-center"><h5>{{ $user->user_id }}</h5></td>
+                        <td class="text-center">
+                            <h5>{{ $user->user_id }}</h5>
+                        </td>
                         <td class="text-center">{{ $user->nick_name }}</td>
                         <td class="text-center">{{ $user->first_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->last_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->Agee }}</td>
                         <td class="text-center">
-                            @if ( $user->user_type && $user->user_type->learn_type_name == 'คู่' )
-
-                                <span class="badge bg-success p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
-
-                            @elseif( $user->user_type && $user->user_type->learn_type_name == 'เดี่ยว' )
-
-                                <span class="badge bg-warning p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
-
-                            @elseif( $user->user_type && $user->user_type->learn_type_name == 'กลุ่ม' )
-
-                                <span class="badge bg-danger p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                            @if ($user->user_type && $user->user_type->learn_type_name == 'คู่')
+                                <span
+                                    class="badge bg-success p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                            @elseif($user->user_type && $user->user_type->learn_type_name == 'เดี่ยว')
+                                <span
+                                    class="badge bg-warning p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                            @elseif($user->user_type && $user->user_type->learn_type_name == 'กลุ่ม')
+                                <span
+                                    class="badge bg-danger p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
                             @else
-                                <span class="badge bg-primary p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                                <span
+                                    class="badge bg-primary p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
                             @endif
                         </td>
 
@@ -127,14 +162,16 @@
                         </td>
 
                         <td class="table-action text-center">
-                            <a href="{{ route('studentshow', $user->user_id) }}" class="action-icon"><i class="mdi mdi-eye"></i></a>
-                            <a href="{{ route('editstudent', $user->user_id) }}" class="action-icon"><i class="mdi mdi-pencil"></i></a>
-                            <a href="#" class="action-icon delete-btn" data-id="{{ $user->user_id }}"><i class="mdi mdi-delete"></i></a>
-                        </td> 
+                            <a href="{{ route('studentshow', $user->user_id) }}" class="action-icon"><i
+                                    class="mdi mdi-eye"></i></a>
+                            <a href="{{ route('editstudent', $user->user_id) }}" class="action-icon"><i
+                                    class="mdi mdi-pencil"></i></a>
+                            <a href="#" class="action-icon delete-btn" data-id="{{ $user->user_id }}"><i
+                                    class="mdi mdi-delete"></i></a>
+                        </td>
                     </tr>
                 @endif
             @endforeach
         </tbody>
     </table>
-
 @endsection
