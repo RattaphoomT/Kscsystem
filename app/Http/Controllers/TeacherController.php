@@ -41,11 +41,11 @@ class TeacherController extends Controller
             'last_name' => 'required|string|max:255',
             'nick_name' => 'required|string|max:255',
             'gender' => 'required|in:1,2',
-            'birthday' => 'required|string|max:255',
-            'Agee' => 'required|integer|min:1',
+            'birthday' => 'nullable|string|max:255',
+            'Agee' => 'nullable|integer|min:1',
             'bank_name' => 'nullable|string|max:255',
             'bank_number' => 'nullable|string|max:255',
-            'mobile_phone' => 'nullable|string|min:10',
+            'mobile_phone' => 'nullable|string|max:10',
             'id_line' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8',
         ]);
@@ -65,7 +65,6 @@ class TeacherController extends Controller
             $message = "เพิ่มครูเรียบร้อยแล้ว\n" ."\n".
 
                        "รหัสครู: $user_id\n" .
-                       "รหัสใช้เข้าสู่ระบบคือ: " . "12345678"."\n"."\n".
 
                        "ชื่อครู: " . $data['nick_name'] . "\n" .
                        "เพศ: " . ($data['gender'] == 1 ? 'ชาย' : 'หญิง') . "\n" .
