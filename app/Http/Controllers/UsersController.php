@@ -7,7 +7,9 @@ use App\Models\Users;
 use App\Models\user_status;
 use App\Models\learn_type;
 use App\Models\learn;
+use App\Models\Coursee;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -58,44 +60,69 @@ class UsersController extends Controller
             'id_line' => 'nullable|string|max:255',
             'learn_type_learn_type_id' => 'required|integer',
             'password' => 'nullable|string|min:8',
+            'date_pay' => 'required|string|max:255',
+            'learn_amount' => 'required|integer|min:1',
         ]);
 
-        // Generate a unique 6-digit user_id based on timestamp
-        $user_id = $this->generateUniqueUserId();
-
-        $data = $request->all();
-
-        $data['user_id'] = $user_id;
-        $data['regis_at'] = now(); // ใส่ค่าเวลาให้กับ regis_at
-
-        
 
         try {
-            Users::create($data);
+            // Generate a unique 6-digit user_id based on timestamp
+            $user_id = $this->generateUniqueUserId();
 
-            // สร้างข้อความเพื่อส่งไปยังไลน์
-            $message = "เพิ่มนักเรียนเรียบร้อย\n" ."\n".
-                       "รหัสนักเรียน: $user_id\n" .
-                       "รหัสใช้เข้าสู่ระบบคือ: " . "12345678"."\n"."\n".
-                       "ชื่อจริง: " . $data['first_name'] . "\n" .
-                       "นามสกุล: " . $data['last_name'] . "\n" .
-                       "ชื่อเล่น: " . $data['nick_name'] . "\n" .
-                       "โรงเรียน: " . $data['school'] . "\n" .
-                       "เพศ: " . ($data['gender'] == 1 ? 'ชาย' : 'หญิง') . "\n" .
-                       "วันเกิด: " . $data['birthday'] . "\n" .
-                       "อายุ: " . $data['Agee'] . "\n" ."\n".
-                       "ชื่อผู้ปกครอง: " . $data['parent_name'] . "\n" .
-                       "ความสัมพันธ์กับผู้ปกครอง: " . $data['parent_relationship'] . "\n" .
-                       "เบอร์ติดต่อ: " . $data['mobile_phone'] . "\n" .
-                       "ไอดีไลน์: " . $data['id_line'] . "\n"."\n". 
-                       "ลงทะเบียนเมื่อ: " . $data['regis_at'];
+            // // Create user data
+            $userData = [
+                'user_id' => $user_id,
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'nick_name' => $request->input('nick_name'),
+                'school' => $request->input('school'),
+                'gender' => $request->input('gender'),
+                'birthday' => $request->input('birthday'),
+                'Agee' => $request->input('Agee'),
+                'parent_name' => $request->input('parent_name'),
+                'parent_relationship' => $request->input('parent_relationship'),
+                'mobile_phone' => $request->input('mobile_phone'),
+                'id_line' => $request->input('id_line'),
+                'learn_type_learn_type_id' => $request->input('learn_type_learn_type_id'),
+                'regis_at' => now(),
+            ];
 
-            // ส่งการแจ้งเตือนไปยังไลน์
+            // Create course data
+            $courseData = [
+                'course_id' => $this->generateUniqueCourseId(),
+                'date_pay' => $request->input('date_pay'),
+                'learn_amount' => $request->input('learn_amount'),
+                'course_user_id' => $user_id,
+                'learntype_id' => $request->input('learn_type_learn_type_id'),
+                'insert_at' => now(),
+            ];
+
+            // Save user and course data
+            Users::create($userData);
+            Coursee::create($courseData);
+
+            // Notification message
+            $message = "เพิ่มนักเรียนเรียบร้อย\n" .
+                "รหัสนักเรียน: $user_id\n" .
+                "ชื่อจริง: {$userData['first_name']}\n" .
+                "นามสกุล: {$userData['last_name']}\n" .
+                "ชื่อเล่น: {$userData['nick_name']}\n" .
+                "โรงเรียน: {$userData['school']}\n" .
+                "เพศ: " . ($userData['gender'] == 1 ? 'ชาย' : 'หญิง') . "\n" .
+                "วันเกิด: {$userData['birthday']}\n" .
+                "อายุ: {$userData['Agee']}\n" .
+                "ชื่อผู้ปกครอง: {$userData['parent_name']}\n" .
+                "ความสัมพันธ์กับผู้ปกครอง: {$userData['parent_relationship']}\n" .
+                "เบอร์ติดต่อ: {$userData['mobile_phone']}\n" .
+                "ไอดีไลน์: {$userData['id_line']}\n" .
+                "ลงทะเบียนเมื่อ: {$userData['regis_at']}";
+
+            // Send notification
             $this->sendLineNotification($message);
 
             return redirect()->route('addstudent')->with('success', "เพิ่มนักเรียนเรียบร้อยแล้ว รหัสนักเรียน: $user_id");
-
         } catch (\Exception $e) {
+            Log::error('Error:', ['exception' => $e]);
             return redirect()->route('addstudent')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
         }
     }
@@ -113,6 +140,20 @@ class UsersController extends Controller
 
         return $random_number;
     }
+
+    private function generateUniqueCourseId()
+    {
+        // Generate a 7-digit random number
+        $random_course_id = mt_rand(1000000, 9999999);
+
+        // Check if this random number exists in database, regenerate if it does
+        while (Coursee::where('course_id', $random_course_id)->exists()) {
+            $random_course_id = mt_rand(1000000, 9999999);
+        }
+
+        return $random_course_id;
+    }
+
 
 
     private function sendLineNotification($message)

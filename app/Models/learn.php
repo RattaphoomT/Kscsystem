@@ -17,7 +17,8 @@ class learn extends Model
         'learn_at',
         'teach_at',
         'learn_type_id',
-        'note'
+        'note',
+        'learn_course_id'
     ];
 
     public $timestamps = false;
@@ -25,6 +26,12 @@ class learn extends Model
     public function user_learn(){
 
         return $this->belongsTo(Users::class,'user_learn_id');
+
+    }
+
+    public function learn_course(){
+
+        return $this->belongsTo(course::class,'learn_course_id');
 
     }
 

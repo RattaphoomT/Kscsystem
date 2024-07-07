@@ -137,6 +137,7 @@
                         <td class="text-center">{{ $user->first_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->last_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->Agee }}</td>
+                       
                         <td class="text-center">
                             @if ($user->user_type && $user->user_type->learn_type_name == 'คู่')
                                 <span

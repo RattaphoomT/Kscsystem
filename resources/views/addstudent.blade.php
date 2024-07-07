@@ -47,6 +47,7 @@
                             <option value="2">หญิง</option>
                         </select>
                     </div>
+
                     <div class="form-group mt-3">
                         <label for="birthday">วันเกิด</label>
                         <input type="text" name="birthday" id="birthday" class="form-control datepicker" required>
@@ -73,12 +74,14 @@
                         <label for="mobile_phone">เบอร์ติดต่อ</label>
                         <input type="text" name="mobile_phone" class="form-control mt-1">
                     </div>
+
                     <div class="form-group mt-3">
                         <label for="id_line">ไอดีไลน์</label>
                         <input type="text" name="id_line" class="form-control mt-1">
                     </div>
+
                     <div class="form-group mt-3">
-                        <label for="learn_type_learn_type_id">ประเภทการเรียน</label>
+                        <label for="learn_type_learn_type_id">ประเภทการเรียน <label class="text-danger"> *</label></label>
                         <select name="learn_type_learn_type_id" class="form-control mt-1" required>
                             <option value="">กรุณาเลือกประเภทการเรียน..</option>
                             @foreach ($learntype as $item)
@@ -86,6 +89,17 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="form-group mt-3">
+                        <label for="learn_amount">จำนวนครั้งในการเรียน</label>
+                        <input type="number" name="learn_amount"  class="form-control mt-1" required>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="date_pay">วันที่จ่ายเงิน</label>
+                        <input type="text" name="date_pay" id="date_pay" class="form-control datepicker" required>
+                    </div>
+
                     <input type="hidden" name="password" value="12345678">
                 </div>
             </div>
