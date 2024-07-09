@@ -31,7 +31,7 @@ class learn extends Model
 
     public function learn_course(){
 
-        return $this->belongsTo(course::class,'learn_course_id');
+        return $this->belongsTo(Coursee::class,'learn_course_id');
 
     }
 

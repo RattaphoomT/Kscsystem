@@ -20,12 +20,13 @@ class Coursee extends Model
         'insert_at'
     ];
 
+    public $timestamps = false;
+
 
     public function learn()
     {
         return $this->hasMany(learn::class, 'learn_course_id');
     }
-
 
     public function learn_type(){
 

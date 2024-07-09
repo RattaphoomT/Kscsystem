@@ -60,7 +60,7 @@ class Users extends Authenticatable
 
     public function course()
     {
-        return $this->hasMany(course::class, 'course_user_id');
+        return $this->hasMany(Coursee::class, 'course_user_id');
     }
 
     public function teach()

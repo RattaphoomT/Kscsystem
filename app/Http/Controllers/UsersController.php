@@ -64,12 +64,11 @@ class UsersController extends Controller
             'learn_amount' => 'required|integer|min:1',
         ]);
 
-
         try {
             // Generate a unique 6-digit user_id based on timestamp
             $user_id = $this->generateUniqueUserId();
 
-            // // Create user data
+            // Create user data
             $userData = [
                 'user_id' => $user_id,
                 'first_name' => $request->input('first_name'),
@@ -87,6 +86,12 @@ class UsersController extends Controller
                 'regis_at' => now(),
             ];
 
+            $user = Users::create($userData);
+
+            if (!$user) {
+                throw new \Exception('Failed to create user');
+            }
+
             // Create course data
             $courseData = [
                 'course_id' => $this->generateUniqueCourseId(),
@@ -97,9 +102,11 @@ class UsersController extends Controller
                 'insert_at' => now(),
             ];
 
-            // Save user and course data
-            Users::create($userData);
-            Coursee::create($courseData);
+            $course = Coursee::create($courseData);
+
+            if (!$course) {
+                throw new \Exception('Failed to create course');
+            }
 
             // Notification message
             $message = "เพิ่มนักเรียนเรียบร้อย\n" .
@@ -126,6 +133,7 @@ class UsersController extends Controller
             return redirect()->route('addstudent')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
         }
     }
+
 
 
     private function generateUniqueUserId()

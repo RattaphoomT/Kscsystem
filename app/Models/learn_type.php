@@ -25,7 +25,7 @@ class learn_type extends Model
 
     public function learn_course()
     {
-        return $this->hasMany(course::class, 'learntype_id');
+        return $this->hasMany(Coursee::class, 'learntype_id');
     }
 
 
