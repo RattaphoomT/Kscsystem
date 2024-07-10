@@ -7,6 +7,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ShowRecordController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RecordteacherController;
 use App\Http\Controllers\PdfController;
 
@@ -56,6 +57,10 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     //export
     Route::get('/pdf/student/{id}', [PdfController::class, 'generateStudentPdf'])->name('pdf.student');
+
+    //ต่อคอร์ส
+    Route::get('/add/course',[CourseController::class,'index'])->name('addcourse');
+    Route::post('/course/store',[CourseController::class,'store'])->name('course.store');
 
 });
 

@@ -93,6 +93,13 @@
                         </li>
 
                         <li class="side-nav-item">
+                            <a href="{{ route('addcourse') }}" class="side-nav-link">
+                                <i class="uil-user-plus"></i>
+                                <span> ต่อคอร์สนักเรียน </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
                             <a href="{{ route('teachermanage') }}" class="side-nav-link">
                                 <i class="uil-users-alt"></i>
                                 <span> จัดการข้อมูลครู </span>

@@ -180,6 +180,7 @@ class UsersController extends Controller
         try {
             // ลบข้อมูลในตาราง learn ก่อน
             Learn::where('user_learn_id', $id)->delete();
+            Coursee::where('course_user_id', $id)->delete();
 
             $user = Users::findOrFail($id);
             $user->delete();
