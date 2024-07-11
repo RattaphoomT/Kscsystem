@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    บันทึกการสอน | KSC System
+    ต่อคอร์ส | KSC System
 @endsection
 
 @section('breadcrumb')
 @endsection
 
 @section('contentitle')
-    <h4 class="page-title">บันทึกการสอน</h4>
+    <h4 class="page-title">ต่อคอร์ส</h4>
 @endsection
 
 @section('nonconten')
@@ -16,13 +16,13 @@
 
 @section('conten')
     <div class="container">
-        <h3 class="text-center">บันทึกการสอน</h3>
+        <h3 class="text-center">ต่อคอร์ส</h3>
         <hr>
 
         
         <form action="{{ route('course.store') }}" method="POST" id="load">
             @csrf
-            <div class="row">
+            <div class="row d-flex justify-content-center">
 
                 <div class="col-md-6 mt-3">
 
@@ -62,7 +62,9 @@
                 </div>
 
             </div>
-            <button type="submit" class="btn btn-primary mt-3">บันทึก</button>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary mt-3" >บันทึก</button>
+            </div>
         </form>
     </div>
 @endsection
