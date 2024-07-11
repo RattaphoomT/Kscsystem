@@ -8,6 +8,7 @@ use App\Models\user_status;
 use App\Models\learn_type;
 use App\Models\learn;
 use App\Models\Coursee;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -207,6 +208,14 @@ class UsersController extends Controller
             Coursee::where('course_user_id', $id)->delete();
 
             $user = Users::findOrFail($id);
+
+            // ตรวจสอบว่ามีรูปภาพหรือไม่
+            if ($user->user_img && File::exists(public_path($user->user_img))) {
+                // ลบไฟล์รูปภาพ
+                File::delete(public_path($user->user_img));
+            }
+
+            // ลบข้อมูลผู้ใช้
             $user->delete();
 
             return response()->json(['message' => 'นักเรียนถูกลบเรียบร้อยแล้ว.'], 200);
