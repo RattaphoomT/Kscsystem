@@ -75,13 +75,9 @@ class UsersController extends Controller
 
             // Handle user image upload
             if ($request->hasFile('user_img')) {
-
                 $file = $request->file('user_img');
-
                 $name = time().'.'.$file->getClientOriginalExtension();
-
                 $Path = 'userr_img/';
-
                 $file->move($Path, $name);
             }
 
@@ -99,7 +95,6 @@ class UsersController extends Controller
                 'parent_relationship' => $request->input('parent_relationship'),
                 'mobile_phone' => $request->input('mobile_phone'),
                 'id_line' => $request->input('id_line'),
-                'learn_type_learn_type_id' => $request->input('learn_type_learn_type_id'),
                 'regis_at' => now(),
                 'password' => $request->input('password'),
                 'user_status_user_status_id' => $request->input('user_status_user_status_id'),
@@ -244,6 +239,7 @@ class UsersController extends Controller
             'parent_relationship' => 'nullable|string|max:255',
             'mobile_phone' => 'nullable|string|max:15',
             'id_line' => 'nullable|string|max:255',
+            'user_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $data = $request->all();
@@ -252,17 +248,87 @@ class UsersController extends Controller
 
         try {
             $user = Users::findOrFail($id);
+
+            // ถ้ามีรูปภาพใหม่อัพโหลด
+            if ($request->hasFile('user_img')) {
+                
+                // ลบรูปภาพเก่าถ้ามี
+                if ($user->user_img && File::exists(public_path($user->user_img))) {
+                    // ลบไฟล์รูปภาพ
+                    File::delete(public_path($user->user_img));
+                }
+
+                // อัพโหลดรูปภาพใหม่
+                $file = $request->file('user_img');
+                $name = time().'.'.$file->getClientOriginalExtension();
+                $Path = 'userr_img/';
+                $file->move($Path, $name);
+
+                // อัปเดตชื่อไฟล์รูปภาพในฐานข้อมูล
+                $data['user_img'] = $Path.$name;
+            }
+
             $user->update($data);
 
             return redirect()->route('studentmange', $id)->with('success', 'อัปเดตข้อมูลนักเรียนเรียบร้อยแล้ว');
             
         } catch (ModelNotFoundException $e) {
-
             abort(404, 'student not found');
-
         } catch (\Exception $e) {
-
             return redirect()->route('studentmange', $id)->with('error', 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล');
         }
     }
+
+
+
+
+
+
+
+
+
+
+    public function createCoursesForUsersWithoutCourses()
+    {
+        try {
+            // ดึงข้อมูลผู้ใช้ทั้งหมด
+            $users = Users::with('course')->get();
+
+            // ลูปผ่านผู้ใช้แต่ละคน
+            foreach ($users as $user) {
+                // ตรวจสอบว่าผู้ใช้ไม่มีคอร์ส
+                if ($user->course->isEmpty()) {
+                    // สร้างคอร์สใหม่สำหรับผู้ใช้นี้
+                    $courseData = [
+                        'course_id' => $this->generateUniqueCourseId(),
+                        'date_pay' => $this->generateRandomDate(),
+                        'learn_amount' => 10,
+                        'course_user_id' => $user->user_id,
+                        'learntype_id' => $user->learn_type_learn_type_id,
+                        'insert_at' => now(),
+                    ];
+
+                    // สร้าง Coursee
+                    Coursee::create($courseData);
+                }
+            }
+
+            return response()->json(['message' => 'สร้าง Coursee สำหรับผู้ใช้ที่ไม่มีคอร์สเรียบร้อยแล้ว.'], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Error creating courses for users:', ['exception' => $e]);
+            return response()->json(['message' => 'เกิดข้อผิดพลาดในการสร้าง Coursee.'], 500);
+        }
+    }
+
+
+
+    private function generateRandomDate()
+    {
+        $start = strtotime("01 January 2023");
+        $end = strtotime("31 December 2023");
+        $timestamp = mt_rand($start, $end);
+        return date("d-m-Y", $timestamp);
+    }
+
 }

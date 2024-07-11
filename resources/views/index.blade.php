@@ -137,10 +137,18 @@
                         <td class="text-center">{{ $user->first_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->last_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">
-                            @if ($user->course->isNotEmpty() && $user->course->first()->learn->isNotEmpty())
-                                {{ $user->course->first()->learn->count() }}/{{ $user->course->first()->learn_amount }}
+                            @if ($user->course->isNotEmpty())
+                                @php
+                                    $course = $user->course->first();
+                                    $learnCount = $course->learn->count();
+                                @endphp
+                                @if ($learnCount > 0)
+                                    {{ $learnCount }}/{{ $course->learn_amount }}
+                                @else
+                                    0/{{ $course->learn_amount }}
+                                @endif
                             @else
-                                0
+                                ไม่มีคอร์ส
                             @endif
                         </td>
                        

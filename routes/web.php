@@ -23,6 +23,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+// Route::get('/create-courses-for-users', [UsersController::class, 'createCoursesForUsersWithoutCourses'])->name('create.courses.for.users');
+
+
 // หน้า dashboard
 Route::middleware([AdminMiddleware::class])->group(function () {
     

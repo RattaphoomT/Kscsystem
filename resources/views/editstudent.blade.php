@@ -19,7 +19,7 @@
         <h3 class="text-center">แก้ไขข้อมูลนักเรียน</h3>
         <hr>
 
-        <form action="{{ route('student.update', ['id' => $show->user_id]) }}" method="POST" id="load">
+        <form action="{{ route('student.update', ['id' => $show->user_id]) }}" method="POST" id="load" enctype="multipart/form-data">
             @csrf
             @method('PUT') <!-- เพิ่ม method สำหรับ PUT ในการอัปเดตข้อมูล -->
 
@@ -89,21 +89,17 @@
                         <input type="text" name="mobile_phone" value="{{ $show->mobile_phone }}"
                             class="form-control mt-1">
                     </div>
+
                     <div class="form-group mt-3">
                         <label for="id_line">ไอดีไลน์</label>
                         <input type="text" name="id_line" value="{{ $show->id_line }}" class="form-control mt-1">
                     </div>
-                    {{-- <div class="form-group mt-3">
-                        <label for="learn_type_learn_type_id">ประเภทการเรียน</label>
-                        <select name="learn_type_learn_type_id" class="form-control mt-1" required>
-                            <option value="{{ $show->learn_type_learn_type_id }}">
-                                {{ $show->user_type ? $show->user_type->learn_type_name : 'ไม่ระบุ' }}
-                            </option>
-                            @foreach ($learntype as $item)
-                                <option value="{{ $item->learn_type_id }}">{{ $item->learn_type_name }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
+
+                    <div class="form-group mt-3">
+                        <label for="user_img">อัปโหลดรูปภาพ</label>
+                        <input type="file" name="user_img" class="form-control mt-1">
+                    </div>
+                    
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-3">บันทึก</button>

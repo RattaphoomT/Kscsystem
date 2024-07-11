@@ -29,7 +29,7 @@
                 <th class="d-none d-sm-table-cell text-center" style="width: 7%">เรียน</th>
                 <th style="width: 10%">รูปแบบการเรียน</th>
                 <th class="d-none d-sm-table-cell" style="width: 8%">เพศ</th>
-                <th style="width: 15%">จัดการข้อมูล</th>
+                <th style="width: 15%" class="text-center">จัดการข้อมูล</th>
             </tr>
         </thead>
         <tbody>
@@ -44,10 +44,18 @@
                         <td class="d-none d-sm-table-cell">{{ $user->last_name }}</td>
 
                         <td class="d-none d-sm-table-cell text-center">
-                            @if ($user->course->isNotEmpty() && $user->course->first()->learn->isNotEmpty())
-                                {{ $user->course->first()->learn->count() }}/{{ $user->course->first()->learn_amount }}
+                            @if ($user->course->isNotEmpty())
+                                @php
+                                    $course = $user->course->first();
+                                    $learnCount = $course->learn->count();
+                                @endphp
+                                @if ($learnCount > 0)
+                                    {{ $learnCount }}/{{ $course->learn_amount }}
+                                @else
+                                    0/{{ $course->learn_amount }}
+                                @endif
                             @else
-                                0
+                                ไม่มีคอร์ส
                             @endif
                         </td>
 
@@ -75,7 +83,7 @@
                             @endif
                         </td>
 
-                        <td class="table-action">
+                        <td class="table-action d-flex justify-content-center">
                             <a href="{{ route('studentshow', $user->user_id) }}" class="action-icon"><i
                                     class="mdi mdi-eye"></i></a>
                             <a href="{{ route('editstudent', $user->user_id) }}" class="action-icon"><i
