@@ -19,7 +19,7 @@
         <h3 class="text-center">เพิ่มนักเรียน</h3>
         <hr>
 
-        <form action="{{ route('student.store') }}" method="POST" id="load">
+        <form action="{{ route('student.store') }}" method="POST" id="load" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-6 mt-3">
@@ -56,6 +56,11 @@
                     <div class="form-group mt-3">
                         <label for="Agee">อายุ</label>
                         <input type="number" name="Agee" id="age" class="form-control mt-1" readonly>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="user_img">อัปโหลดรูปภาพ</label>
+                        <input type="file" name="user_img" class="form-control mt-1">
                     </div>
 
                     <input type="hidden" name="user_status_user_status_id" value="2">

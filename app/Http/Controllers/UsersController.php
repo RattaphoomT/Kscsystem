@@ -55,7 +55,7 @@ class UsersController extends Controller
             'nick_name' => 'required|string|max:255',
             'school' => 'nullable|string|max:255',
             'gender' => 'required|in:1,2',
-            'birthday' => 'required|string|max:255',
+            'birthday' => 'required|date',
             'Agee' => 'required|integer|min:1',
             'parent_name' => 'nullable|string|max:255',
             'parent_relationship' => 'nullable|string|max:255',
@@ -63,15 +63,28 @@ class UsersController extends Controller
             'id_line' => 'nullable|string|max:255',
             'learn_type_learn_type_id' => 'required|integer',
             'password' => 'nullable|string|min:8',
-            'date_pay' => 'required|string|max:255',
+            'date_pay' => 'required|date',
             'learn_amount' => 'required|integer|min:1',
+            'user_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:500'
         ]);
 
         try {
-            // Generate a unique 6-digit user_id based on timestamp
+            // Generate unique user_id
             $user_id = $this->generateUniqueUserId();
 
-            // Create user data
+            // Handle user image upload
+            if ($request->hasFile('user_img')) {
+
+                $file = $request->file('user_img');
+
+                $name = time().'.'.$file->getClientOriginalExtension();
+
+                $Path = 'userr_img/';
+
+                $file->move($Path, $name);
+            }
+
+            // Prepare user data for creation
             $userData = [
                 'user_id' => $user_id,
                 'first_name' => $request->input('first_name'),
@@ -88,16 +101,18 @@ class UsersController extends Controller
                 'learn_type_learn_type_id' => $request->input('learn_type_learn_type_id'),
                 'regis_at' => now(),
                 'password' => $request->input('password'),
-                'user_status_user_status_id' => $request->input('user_status_user_status_id')
+                'user_status_user_status_id' => $request->input('user_status_user_status_id'),
+                'user_img' => $Path.$name
             ];
 
+            // Create user record
             $user = Users::create($userData);
 
             if (!$user) {
                 throw new \Exception('Failed to create user');
             }
 
-            // Create course data
+            // Prepare course data for creation
             $courseData = [
                 'course_id' => $this->generateUniqueCourseId(),
                 'date_pay' => $request->input('date_pay'),
@@ -107,13 +122,14 @@ class UsersController extends Controller
                 'insert_at' => now(),
             ];
 
+            // Create course record
             $course = Coursee::create($courseData);
 
             if (!$course) {
                 throw new \Exception('Failed to create course');
             }
 
-            // Notification message
+            // Success message
             $message = "เพิ่มนักเรียนเรียบร้อย\n" .
                 "รหัสนักเรียน: $user_id\n" .
                 "ชื่อจริง: {$userData['first_name']}\n" .
@@ -127,6 +143,7 @@ class UsersController extends Controller
                 "ความสัมพันธ์กับผู้ปกครอง: {$userData['parent_relationship']}\n" .
                 "เบอร์ติดต่อ: {$userData['mobile_phone']}\n" .
                 "ไอดีไลน์: {$userData['id_line']}\n" .
+                // Include other user data
                 "ลงทะเบียนเมื่อ: {$userData['regis_at']}";
 
             // Send notification
@@ -138,6 +155,8 @@ class UsersController extends Controller
             return redirect()->route('addstudent')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
         }
     }
+
+
 
 
 

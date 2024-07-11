@@ -23,12 +23,15 @@
 
 
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
+                <img src="{{ asset('storage/' . $show->user_img) }}" alt="User Image">
+            </div>
+            <div class="col-sm-3">
                 <h5>ชื่อเล่น : {{ $show->nick_name }}</h5>
                 <h5>อายุ : {{ $show->Agee }} ปี</h5>
                 <h5>โรงเรียน : {{ $show->school }}</h5>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="col">
                     <h5>ชื่อจริง : {{ $show->first_name }}</h5>
                     <h5>นามสกุล : {{ $show->last_name }}</h5>
@@ -50,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 @php
                     use Carbon\Carbon;
 
