@@ -557,6 +557,18 @@
         </script>
     @endif
 
+    @if (Session::has('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire(
+                    'การทำงานผิดพลาด!',
+                    '{{ Session::get('error') }}',
+                    'error'
+                )
+            });
+        </script>
+    @endif
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.delete-btn').forEach(button => {
@@ -728,6 +740,7 @@
 
     <script>
         $(document).ready(function() {
+            $.fn.dataTable.ext.errMode = 'none';
             let table = $('#basic-datatable').DataTable({
                 "lengthMenu": [
                     [10, 20, 50, -1],
@@ -747,6 +760,32 @@
                         "previous": "ก่อนหน้า"
                     }
                 }
+            });
+        });
+
+        $(document).ready(function() {
+            $.fn.dataTable.ext.errMode = 'none';
+            $('.show-student-datatable').each(function() {
+                $(this).DataTable({
+                    "lengthMenu": [
+                        [10, 20, 50, -1],
+                        [10, 20, 50, "ทั้งหมด"]
+                    ],
+                    "language": {
+                        "lengthMenu": "แสดง _MENU_ รายการ",
+                        "zeroRecords": "ไม่พบข้อมูล",
+                        "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                        "infoEmpty": "ไม่มีรายการที่แสดง",
+                        "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
+                        "search": "ค้นหา:",
+                        "paginate": {
+                            "first": "หน้าแรก",
+                            "last": "หน้าสุดท้าย",
+                            "next": "ถัดไป",
+                            "previous": "ก่อนหน้า"
+                        }
+                    }
+                });
             });
         });
 

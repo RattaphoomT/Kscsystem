@@ -120,7 +120,7 @@
                 <th style="width: 10%" class="text-center">ชื่อเล่น</th>
                 <th style="width: 15%" class="text-center">ชื่อจริง</th>
                 <th class="d-none d-sm-table-cell text-center" style="width: 12%">นามสกุล</th>
-                <th class="d-none d-sm-table-cell text-center" style="width: 5%">อายุ</th>
+                <th style="width: 10%" class="text-center">การเรียน</th>
                 <th style="width: 10%" class="text-center">รูปแบบการเรียน</th>
                 <th class="d-none d-sm-table-cell text-center" style="width: 8%">เพศ</th>
                 <th style="width: 15%" class="text-center">จัดการข้อมูล</th>
@@ -136,23 +136,30 @@
                         <td class="text-center">{{ $user->nick_name }}</td>
                         <td class="text-center">{{ $user->first_name }}</td>
                         <td class="d-none d-sm-table-cell text-center">{{ $user->last_name }}</td>
-                        <td class="d-none d-sm-table-cell text-center">{{ $user->Agee }}</td>
-                       
-                        <td class="text-center">
-                            @if ($user->user_type && $user->user_type->learn_type_name == 'คู่')
-                                <span
-                                    class="badge bg-success p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
-                            @elseif($user->user_type && $user->user_type->learn_type_name == 'เดี่ยว')
-                                <span
-                                    class="badge bg-warning p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
-                            @elseif($user->user_type && $user->user_type->learn_type_name == 'กลุ่ม')
-                                <span
-                                    class="badge bg-danger p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                        <td class="d-none d-sm-table-cell text-center">
+                            @if ($user->course->isNotEmpty() && $user->course->first()->learn->isNotEmpty())
+                                {{ $user->course->first()->learn->count() }}/{{ $user->course->first()->learn_amount }}
                             @else
-                                <span
-                                    class="badge bg-primary p-1">{{ $user->user_type ? $user->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
+                                0
                             @endif
                         </td>
+                       
+                        <td class="text-center">
+                            @if ($user->course->isNotEmpty() && isset($user->course->first()->learn_type))
+                                @if ($user->course->first()->learn_type->learn_type_name == 'คู่')
+                                    <span class="badge bg-success p-1">{{ $user->course->first()->learn_type->learn_type_name }}</span>
+                                @elseif ($user->course->first()->learn_type->learn_type_name == 'เดี่ยว')
+                                    <span class="badge bg-warning p-1">{{ $user->course->first()->learn_type->learn_type_name }}</span>
+                                @elseif ($user->course->first()->learn_type->learn_type_name == 'กลุ่ม')
+                                    <span class="badge bg-danger p-1">{{ $user->course->first()->learn_type->learn_type_name }}</span>
+                                @else
+                                    <span class="badge bg-primary p-1">{{ $user->course->first()->learn_type->learn_type_name }}</span>
+                                @endif
+                            @else
+                                <span class="badge bg-primary p-1">ไม่ระบุ</span>
+                            @endif
+                        </td>
+                        
 
                         <td class="d-none d-sm-table-cell text-center">
                             @if ($user->gender == '1')

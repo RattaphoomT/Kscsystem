@@ -80,51 +80,52 @@
 
         <h4 class="mt-3"><i class=" uil-file-alt"></i> ประวัติการสอน ( {{ Auth::user()->nick_name }} )</h4>
         <hr>
-    </div>
 
-    <table class="table table-centered mb-0 " id="basic-datatable" style="width: 100%">
-        <thead class="table-dark">
-            <tr>
-                <th style="width: 10%">ครั้งที่สอน</th>
-                <th class="d-none d-sm-table-cell" style="width: 10%">ไอดีการสอน</th>
-                <th style="width: 10%">ชื่อเล่น</th>
-                <th class="d-none d-sm-table-cell" style="width: 10%">ชื่อจริง</th>
-                <th style="width: 10%" class="text-center">การเรียน</th>
-                <th style="width: 30%" class="text-center">หมายเหตุ</th>
-                <th style="width: 20%" class="text-center">สอนเมื่อ</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse (Auth::user()->teach as $index => $record)
+
+        <table class="table table-centered mb-0 " id="basic-datatable" style="width: 100%">
+            <thead class="table-dark">
                 <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="d-none d-sm-table-cell text-center">{{ $record->learn_id }}</td>
-                    <td class="text-center">{{ $record->user_learn->nick_name }}</td>
-                    <td class="text-center d-none d-sm-table-cell text-center">{{ $record->user_learn->first_name }}</td>
-                    <td class="text-center">
-                        @switch($record->learn_type->learn_type_name)
-                            @case('เดี่ยว')
-                                <span class="badge bg-warning p-1">{{ $record->learn_type->learn_type_name }}</span>
-                            @break
-
-                            @case('คู่')
-                                <span class="badge bg-success p-1">{{ $record->learn_type->learn_type_name }}</span>
-                            @break
-
-                            @case('กลุ่ม')
-                                <span class="badge bg-danger p-1">{{ $record->learn_type->learn_type_name }}</span>
-                            @break
-
-                            @default
-                                <span class="badge bg-primary p-1">{{ $record->learn_type->learn_type_name }}</span>
-                        @endswitch
-                    </td>
-                    <td class="text-center">{{ $record->note }}</td>
-                    <td class="text-center">{{ $record->learn_at }}</td>
+                    <th style="width: 10%">ครั้งที่สอน</th>
+                    <th class="d-none d-sm-table-cell" style="width: 10%">ไอดีการสอน</th>
+                    <th style="width: 10%">ชื่อเล่น</th>
+                    <th class="d-none d-sm-table-cell" style="width: 10%">ชื่อจริง</th>
+                    <th style="width: 10%" class="text-center">การเรียน</th>
+                    <th style="width: 30%" class="text-center">หมายเหตุ</th>
+                    <th style="width: 20%" class="text-center">สอนเมื่อ</th>
                 </tr>
-                @empty
-                    
-                @endforelse
-            </tbody>
-        </table>
-    @endsection
+            </thead>
+            <tbody>
+                @forelse (Auth::user()->teach as $index => $record)
+                    <tr>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td class="d-none d-sm-table-cell text-center">{{ $record->learn_id }}</td>
+                        <td class="text-center">{{ $record->user_learn->nick_name }}</td>
+                        <td class="text-center d-none d-sm-table-cell text-center">{{ $record->user_learn->first_name }}</td>
+                        <td class="text-center">
+                            @switch($record->learn_type->learn_type_name)
+                                @case('เดี่ยว')
+                                    <span class="badge bg-warning p-1">{{ $record->learn_type->learn_type_name }}</span>
+                                @break
+    
+                                @case('คู่')
+                                    <span class="badge bg-success p-1">{{ $record->learn_type->learn_type_name }}</span>
+                                @break
+    
+                                @case('กลุ่ม')
+                                    <span class="badge bg-danger p-1">{{ $record->learn_type->learn_type_name }}</span>
+                                @break
+    
+                                @default
+                                    <span class="badge bg-primary p-1">{{ $record->learn_type->learn_type_name }}</span>
+                            @endswitch
+                        </td>
+                        <td class="text-center">{{ $record->note }}</td>
+                        <td class="text-center">{{ $record->learn_at }}</td>
+                    </tr>
+                    @empty
+                        
+                    @endforelse
+                </tbody>
+            </table>
+    </div> 
+@endsection

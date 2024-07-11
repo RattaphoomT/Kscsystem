@@ -16,8 +16,11 @@ class StudentmanageController extends Controller
     public function index()
     {
         // ดึงข้อมูลผู้ใช้ทั้งหมดพร้อมกับสถานะของผู้ใช้
-        $users = Users::with('user_status')->get();
-
+        $users = Users::with(['user_status', 'course' => function ($query) {
+            // เลือกคอร์สล่าสุดจาก date_pay และเรียงลำดับจากมากไปน้อย
+            $query->latest('date_pay')->take(1);
+        }])->get();
+        
         return view('studentmanage', compact('users'));
     }
 
@@ -42,7 +45,9 @@ class StudentmanageController extends Controller
      */
     public function show(string $id)
     {
-        $show = Users::with(['learn.learn_type'])->findOrFail($id);
+        $show = Users::with(['course.learn.learn_type', 'course' => function ($query) {
+            $query->orderBy('date_pay'); // เรียงลำดับคอร์สตามวันที่สมัครคอร์ส
+        }])->findOrFail($id);
         $show->update_at = Carbon::parse($show->update_at);
 
         // ตรวจสอบว่าพบข้อมูลหรือไม่
@@ -52,6 +57,7 @@ class StudentmanageController extends Controller
         
         return view('showstudent', compact('show'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

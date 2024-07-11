@@ -93,7 +93,7 @@
                         <label for="id_line">ไอดีไลน์</label>
                         <input type="text" name="id_line" value="{{ $show->id_line }}" class="form-control mt-1">
                     </div>
-                    <div class="form-group mt-3">
+                    {{-- <div class="form-group mt-3">
                         <label for="learn_type_learn_type_id">ประเภทการเรียน</label>
                         <select name="learn_type_learn_type_id" class="form-control mt-1" required>
                             <option value="{{ $show->learn_type_learn_type_id }}">
@@ -103,7 +103,7 @@
                                 <option value="{{ $item->learn_type_id }}">{{ $item->learn_type_name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-3">บันทึก</button>

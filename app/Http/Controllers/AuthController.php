@@ -36,7 +36,7 @@ class AuthController extends Controller
                 case 3:
                     return redirect()->route('teacher.dashboard')->with('success', 'เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ '. $user->nick_name );
                 default:
-                    return redirect()->route('showlogin')->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
+                    return redirect()->route('first')->with('error', 'เข้าสู่ระบบไม่สำเร็จ');
             }
         }
 

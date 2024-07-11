@@ -28,7 +28,7 @@
                 <div class="col">
                     <h5>ชื่อจริง : {{ Auth::user()->first_name }}</h5>
                     <h5>นามสกุล : {{ Auth::user()->last_name }}</h5>
-                    <h5 class="position-relative">รูปแบบการเรียน :
+                    {{-- <h5 class="position-relative">รูปแบบการเรียน :
                         @if (Auth::user()->user_type && Auth::user()->user_type->learn_type_name == 'คู่')
                             <span
                                 class="badge bg-success p-1">{{ Auth::user()->user_type ? Auth::user()->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
@@ -42,7 +42,7 @@
                             <span
                                 class="badge bg-primary p-1">{{ Auth::user()->user_type ? Auth::user()->user_type->learn_type_name : 'ไม่ระบุ' }}</span>
                         @endif
-                    </h5>
+                    </h5> --}}
                 </div>
             </div>
             <div class="col-sm-4">
@@ -80,49 +80,79 @@
         </div>
         <h4 class="mt-3"><i class=" uil-file-alt"></i> ประวัติการเรียน ( {{ Auth::user()->nick_name }} )</h4>
         <hr>
-        <table class="table table-centered mb-0 table-sm-12" id="basic-datatable" style="width: 100%">
-            <thead class="table-dark">
-                <tr>
-                    <th style="width: 10%" class="text-center">ครั้งที่มาเรียน</th>
-                    <th class="d-none d-sm-table-cell text-center" style="width: 10%">ไอดีเรียน</th>
-                    <th style="width: 10%" class="text-center">ครูผู้สอน</th>
-                    <th style="width: 10%" class="text-center">การเรียน</th>
-                    <th style="width: 30%" class="text-center">พัฒนาการ</th>
-                    <th style="width: 30%" class="text-center">เรียนเมื่อ</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Auth::user()->learn->isNotEmpty())
-                    @php $index = 1; @endphp
-                    @foreach (Auth::user()->learn as $learn_type_id)
-                        <tr>
-                            <td class="text-center">{{ $index }}</td>
-                            <td class="d-none d-sm-table-cell text-center">{{ $learn_type_id->learn_id }}</td>
-                            <td class="text-center">{{ $learn_type_id->user_teach->nick_name }}</td>
-                            <td class="text-center">
-                                @if ($learn_type_id->learn_type->learn_type_name == 'เดี่ยว')
-                                    <span
-                                        class="badge bg-warning p-1 position-relative">{{ $learn_type_id->learn_type->learn_type_name }}</span>
-                                @elseif($learn_type_id->learn_type->learn_type_name == 'คู่')
-                                    <span
-                                        class="badge bg-success p-1 position-relative">{{ $learn_type_id->learn_type->learn_type_name }}</span>
-                                @elseif($learn_type_id->learn_type->learn_type_name == 'กลุ่ม')
-                                    <span
-                                        class="badge bg-danger p-1 position-relative">{{ $learn_type_id->learn_type->learn_type_name }}</span>
-                                @else
-                                    <span
-                                        class="badge bg-primary p-1 position-relative">{{ $learn_type_id->learn_type->learn_type_name }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                {{ $learn_type_id->note }}
-                            </td>
-                            <td class="text-center">{{ $learn_type_id->learn_at }}</td>
-                        </tr>
-                        @php $index++; @endphp
-                    @endforeach
+
+        @foreach (Auth::user()->course->sortByDesc('date_pay') as $index => $course)
+            <h2 class="text-center mt-4">คอร์สที่ {{ $index + 1 }}</h2>
+            <h4 class="text-center">
+                @if (isset($course->learn_type))
+                    @if ($course->learn_type->learn_type_name == 'คู่')
+                        {{ $course->learn_type->learn_type_name }}
+                    @elseif ($course->learn_type->learn_type_name == 'เดี่ยว')
+                        {{ $course->learn_type->learn_type_name }}
+                    @elseif ($course->learn_type->learn_type_name == 'กลุ่ม')
+                        {{ $course->learn_type->learn_type_name }}
+                    @else
+                        {{ $course->learn_type->learn_type_name }}
+                    @endif
+                @else
+                    ไม่ระบุ
                 @endif
-            </tbody>
-        </table>
+            </h4>
+            <h5>สมัครคอร์สเมื่อ : {{ $course->date_pay }}</h5>
+
+            <h5>จำนวนครั้งในการเรียน : {{ $course->learn->count() }}/{{ $course->learn_amount }}
+                @if ($course->learn->count() == $course->learn_amount)
+                    <h5 class="text-success">เรียนครบเเล้ว</h5>
+                @else
+                    <h5 class="text-danger">ยังเรียนไม่ครบ</h5>
+                @endif
+            </h5>
+
+            <table class="table table-centered mb-0 table-sm-12" id="basic-datatable" style="width: 100%">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 10%" class="text-center">ครั้งที่มาเรียน</th>
+                        <th class="d-none d-sm-table-cell text-center" style="width: 10%">ไอดีเรียน</th>
+                        <th style="width: 10%" class="text-center">ครูผู้สอน</th>
+                        <th style="width: 10%" class="text-center">การเรียน</th>
+                        <th style="width: 30%" class="text-center">พัฒนาการ</th>
+                        <th style="width: 30%" class="text-center">เรียนเมื่อ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Auth::user()->course->isNotEmpty())
+                        @foreach ($course->learn as $learn)
+                            <tr>
+                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td class="d-none d-sm-table-cell text-center">{{ $learn->learn_id }}</td>
+                                <td class="text-center">{{ $learn->user_teach->nick_name }}</td>
+                                <td class="text-center">
+                                    @if ($learn->learn_type->learn_type_name == 'เดี่ยว')
+                                        <span
+                                            class="badge bg-warning p-1 position-relative">{{ $learn->learn_type->learn_type_name }}</span>
+                                    @elseif ($learn->learn_type->learn_type_name == 'คู่')
+                                        <span
+                                            class="badge bg-success p-1 position-relative">{{ $learn->learn_type->learn_type_name }}</span>
+                                    @elseif ($learn->learn_type->learn_type_name == 'กลุ่ม')
+                                        <span
+                                            class="badge bg-danger p-1 position-relative">{{ $learn->learn_type->learn_type_name }}</span>
+                                    @else
+                                        <span
+                                            class="badge bg-primary p-1 position-relative">{{ $learn->learn_type->learn_type_name }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $learn->note }}</td>
+                                <td class="text-center">{{ $learn->learn_at }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6" class="text-center">ไม่มีข้อมูลการเรียนในคอร์สนี้</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        @endforeach
+
     </div>
 @endsection

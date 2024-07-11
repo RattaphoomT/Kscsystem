@@ -46,6 +46,15 @@ class CourseController extends Controller
         ]);
 
         try {
+            // ดึงข้อมูลคอร์สของผู้ใช้ทั้งหมด
+            $userCourses = Coursee::where('course_user_id', $request->input('course_user_id'))->get();
+
+            // ตรวจสอบคอร์สที่มีจำนวนการเรียน (learn) ไม่ครบตาม learn_amount
+            foreach ($userCourses as $userCourse) {
+                if ($userCourse->learn->count() < $userCourse->learn_amount) {
+                    return redirect()->route('addcourse')->with('error', 'ยังมีคอร์สที่จำนวนการเรียนไม่ครบ');
+                }
+            }
 
             $course_id = $this->generateUniqueCourseId();
 
@@ -68,12 +77,11 @@ class CourseController extends Controller
             return redirect()->route('addcourse')->with('success', "ต่อคอร์สให้นักเรียนเรียบร้อย ไอดีคอร์ส: $course_id");
 
         } catch (\Exception $e) {
-
             Log::error('Error:', ['exception' => $e]);
             return redirect()->route('addcourse')->with('error', 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน');
-
         }
     }
+
 
     /**
      * Display the specified resource.

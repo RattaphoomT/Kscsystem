@@ -16,7 +16,10 @@ class UsersController extends Controller
     public function index()
     {
         // ดึงข้อมูลผู้ใช้ทั้งหมดพร้อมกับสถานะของผู้ใช้
-        $users = Users::with('user_status')->get();
+        $users = Users::with(['user_status', 'course' => function ($query) {
+            // เลือกคอร์สล่าสุดจาก date_pay และเรียงลำดับจากมากไปน้อย
+            $query->latest('date_pay')->take(1);
+        }])->get();
 
         return view('index', compact('users'));
     }
@@ -31,7 +34,7 @@ class UsersController extends Controller
     public function edit(string $id)
     {
         $show = Users::with(['learn.learn_type'])->findOrFail($id);
-        $learntype = learn_type::all();
+        
 
         // ตรวจสอบว่าพบข้อมูลหรือไม่
         if (!$show) {
@@ -41,7 +44,7 @@ class UsersController extends Controller
         // จัดรูปแบบวันเกิดให้อยู่ในรูปแบบที่ต้องการ
         $show->birthday = \Carbon\Carbon::parse($show->birthday)->format('d-m-Y');
 
-        return view('editstudent', compact('show', 'learntype'));
+        return view('editstudent', compact('show'));
     }
 
     public function store(Request $request)
@@ -84,6 +87,8 @@ class UsersController extends Controller
                 'id_line' => $request->input('id_line'),
                 'learn_type_learn_type_id' => $request->input('learn_type_learn_type_id'),
                 'regis_at' => now(),
+                'password' => $request->input('password'),
+                'user_status_user_status_id' => $request->input('user_status_user_status_id')
             ];
 
             $user = Users::create($userData);
@@ -211,7 +216,6 @@ class UsersController extends Controller
             'parent_relationship' => 'nullable|string|max:255',
             'mobile_phone' => 'nullable|string|max:15',
             'id_line' => 'nullable|string|max:255',
-            'learn_type_learn_type_id' => 'required|integer',
         ]);
 
         $data = $request->all();
