@@ -103,11 +103,16 @@
                 <h5 class="text-danger">ยังเรียนไม่ครบ</h5>
                 @endif
             </h5>
-            <table class="table table-centered mb-0 table-sm-12 show-student-datatable" style="width: 100%">
+
+            
+            <a href="{{ route('course.edit', $course->course_id) }}" class="btn btn-success">เเก้ไข</a>
+            <a href="#" class="btn btn-danger" data-id="{{ $course->course_id }}">ลบคอร์ส</a>
+
+            <table class="table table-centered mb-0 table-sm-12 show-student-datatable w-100">
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 10%" class="text-center">ครั้งที่มาเรียน</th>
-                        <th class="d-none d-sm-table-cell text-center" style="width: 10%">ไอดีเรียน</th>
+                        <th style="width: 10%" class="d-none d-sm-table-cell text-center">ไอดีเรียน</th>
                         <th style="width: 10%" class="text-center">ครูผู้สอน</th>
                         <th style="width: 10%">การเรียน</th>
                         <th style="width: 30%" class="d-none d-sm-table-cell text-center">พัฒนาการ</th>

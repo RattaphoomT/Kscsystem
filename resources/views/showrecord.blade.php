@@ -76,10 +76,12 @@
                     
 
                     <td class="table-action text-center">
+                        
                         {{-- <a href="{{ route('studentshow', $user->user_id) }}" class="action-icon"><i
                                 class="mdi mdi-eye"></i></a>
                         <a href="{{ route('editstudent', $user->user_id) }}" class="action-icon"><i
                                 class="mdi mdi-pencil"></i></a> --}}
+
                         <a href="#" class="action-icon delete-learn-btn" data-id="{{ $item->learn_id }}"><i
                                 class="mdi mdi-delete"></i></a>
                     </td>

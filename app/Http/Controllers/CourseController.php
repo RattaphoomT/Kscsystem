@@ -94,17 +94,38 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $course = Coursee::findOrFail($id);
+        $learntype = learn_type::all();
+        $users = Users::all();
+
+        return view('editcourse', compact('course', 'learntype','users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'learntype_id' => 'required|integer',
+            'date_pay' => 'required|string|max:255',
+            'learn_amount' => 'required|integer|min:1',
+        ]);
+
+        try {
+            $course = Coursee::findOrFail($id);
+            $course->learntype_id = $request->input('learntype_id');
+            $course->date_pay = $request->input('date_pay');
+            $course->learn_amount = $request->input('learn_amount');
+            $course->save();
+
+            return redirect()->route('studentshow',$course->user_course->user_id)->with('success', 'อัพเดทข้อมูลคอร์สเรียบร้อย');
+        } catch (\Exception $e) {
+            
+            return redirect()->route('studentshow',$course->user_course->user_id)->with('error', 'เกิดข้อผิดพลาดในการอัพเดทคอร์ส');
+        }
     }
 
     /**
@@ -112,7 +133,22 @@ class CourseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Learn::where('learn_course_id', $id)->delete();
+
+            $course = Coursee::findOrFail($id);
+            $course->delete();
+
+            return response()->json(['message' => 'คอร์สเรียนถูกลบเรียบร้อยแล้ว.'], 200);
+
+        } catch (ModelNotFoundException $e) {
+
+            return response()->json(['message' => 'ไม่พบคอร์สเรียนที่ต้องการลบ.'], 404);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'เกิดข้อผิดพลาดในการลบคอร์สเรียน.'], 500);
+        }
     }
 
     private function generateUniqueCourseId()

@@ -64,6 +64,9 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //ต่อคอร์ส
     Route::get('/add/course',[CourseController::class,'index'])->name('addcourse');
     Route::post('/course/store',[CourseController::class,'store'])->name('course.store');
+    Route::get('course/{id}/edit', [CourseController::class, 'edit'])->name('course.edit');
+    Route::post('course/{id}', [CourseController::class, 'update'])->name('course.update');
+    Route::delete('delete/course/{id}', [CourseController::class,'destroy'])->name('course.destroy');
 
 });
 

@@ -625,6 +625,63 @@
             });
         });
 
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-btn-course').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const courseId = this.dataset.id;
+
+                    Swal.fire({
+                        title: 'ยืนยันการลบ คอร์ส หรือไม่',
+                        text: "เมื่อลบแล้วไม่สามารถกู้คืนได้",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ยืนยัน'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/delete/course/${courseId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(response => {
+                                return response.json().then(data => {
+                                    if (response.ok) {
+                                        Swal.fire(
+                                            'ลบแล้ว!',
+                                            'คอร์สถูกลบเรียบร้อยแล้ว.',
+                                            'success'
+                                        ).then(() => {
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'ผิดพลาด!',
+                                            data.message ||
+                                            'เกิดข้อผิดพลาดในการลบคอร์ส.',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }).catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire(
+                                    'ผิดพลาด!',
+                                    'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์.',
+                                    'error'
+                                );
+                            });
+                        }
+                    });
+                });
+            });
+        });
+
+
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.delete-learn-btn').forEach(button => {
                 button.addEventListener('click', function(event) {
