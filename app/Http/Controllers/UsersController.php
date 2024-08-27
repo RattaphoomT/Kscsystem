@@ -78,7 +78,7 @@ class UsersController extends Controller
                 $file = $request->file('user_img');
                 $name = time().'.'.$file->getClientOriginalExtension();
                 $Path = 'userr_img/';
-                $file->move($Path, $name);
+                $file->move(public_path($Path), $name); // public_path() เพื่อระบุ path ที่ถูกต้อง
             }
 
             // Prepare user data for creation
